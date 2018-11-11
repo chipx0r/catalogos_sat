@@ -113,9 +113,9 @@ class Catalogos
 
   end
   
-  # Genera un folder "catalogosJSON" en la ruta temporal del sistema operativo, requiere que ya exista el .xls generado,
+  # Genera un folder "catalogosSAT" en la ruta temporal del sistema operativo, requiere que ya exista el .xls generado,
   # usualmente se usa despues de mandar llamar descargar.
-  def procesar()
+  def procesar(prnFile = false)
 
     begin
       Spreadsheet.client_encoding = 'UTF-8'
@@ -127,7 +127,7 @@ class Catalogos
       
       raise 'El archivo de catálogos de Excel no existe o no ha sido descargado' if File.exist?(archivo) == false
       
-      final_dir = "catalogosJSON"
+      final_dir = "catalogosSAT"
       if File.exist?("#{tempdir}/#{final_dir}")
         FileUtils.rm_rf("#{tempdir}/#{final_dir}")
       end
@@ -153,7 +153,7 @@ class Catalogos
         hoja = book.worksheet i
       
         #puts "\n\n----------------------------------------------"
-        #puts "Conviertiendo a JSON hoja #{hoja.name}..."
+        #puts "Conviertiendo #{hoja.name} a archivo..."
       
         # Manejamos la lectura de dos hojas separadas en partes, como la de Codigo Postal  
         if hoja.name.index("_Parte_") != nil
@@ -312,12 +312,20 @@ class Catalogos
           
         end 
       
-        # Guardamos el contenido JSON
+        # Guardamos el contenido
         if !en_partes || ultima_parte then 
-          #puts "Escribiendo archivo JSON..."
+          #puts "Escribiendo archivo..."
           hoja.name.sub!(/(_Parte_\d+)$/, '') if ultima_parte
-          File.open("#{tempdir}/#{final_dir}/#{hoja.name}.json","w") do |f|
-            f.write(JSON.pretty_generate(renglones_json))
+          File.open("#{tempdir}/#{final_dir}/#{hoja.name}." + (prnFile ? "prn" : "json"),"w") do |f|
+            if prnFile
+              keys = renglones_json.first.keys
+              f.write(keys.join('|') + "\n")
+              renglones_json.each do |hash|
+              f.write(hash.values_at(*keys).join('|') + "\n")
+              end
+            else
+              f.write(JSON.pretty_generate(renglones_json))
+            end
           end
           renglones_json = nil
           en_partes = false
@@ -330,10 +338,10 @@ class Catalogos
   
      
       
-      puts "Se finalizó creacion de JSONs en directorio: #{tempdir}"
+      puts "Se finalizó creacion de archivos en directorio: #{tempdir}"
 
     rescue => e
-      puts "Error en generacion de JSONs: #{e.message}"
+      puts "Error en generacion de archivos: #{e.message}"
       raise
     end
 
@@ -400,10 +408,10 @@ class Catalogos
   # obtener de @last_eTag en una iteracion previa del programa.
   # @param url_excel [String] el url donde el SAT tiene los catalogos, valor default @catalogos_url
   # @return [Bool] verdadero si no hubo ningun error.
-  def main(url_excel = @catalogos_url)
+  def main(paraPrn = false, url_excel = @catalogos_url)
 
     descargar(url_excel)
-    procesar()
+    procesar(paraPrn)
     
     return true
         
