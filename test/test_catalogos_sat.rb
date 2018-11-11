@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require 'catalogos_sat'
+require_relative 'catalogos_sat'
 
 class CatalogosTest < Minitest::Test
   def test_modulos
@@ -12,7 +12,7 @@ class CatalogosTest < Minitest::Test
   end
   def test_main
     myTest = Catalogos.new()
-    assert(myTest.main)
+    assert(myTest.main(true))
   end
 
   
