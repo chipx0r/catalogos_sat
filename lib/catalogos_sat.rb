@@ -208,6 +208,11 @@ class Catalogos
                   col = "maximo" if col == nil 
                   col = "minimo" if col == "c_TasaOCuota" 
                 end
+
+                if hoja.name == "c_FraccionArancelaria"
+                  col = "exportacion" if col == nil
+                  col = "importacion" if col == "IMPUESTO"
+                end
               
                 next if col == nil
                 # Si el nombre de la columna es el mismo que la hoja entonces es el "id" del catálogo
