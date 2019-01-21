@@ -258,6 +258,8 @@ class Catalogos
                     else
                       valor = "%02d" % row[k].to_i                       
                     end
+                  elsif encabezados[k] == 'estimuloFranjaFronteriza'
+                      valor = "%01d" % row[k].to_i
                   else
                     valor = row[k].to_f  
                     if valor % 1 == 0
