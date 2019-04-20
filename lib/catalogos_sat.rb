@@ -255,14 +255,14 @@ class Catalogos
                   if (title_regex.match(encabezados[k])) or encabezados[k] == 'id'
                     if hoja.name == "c_Impuesto"
                       valor = "%03d" % row[k].to_i                                             
-                    elsif hoja.name == "C_PatenteAduanal"
+                    elsif hoja.name == "c_PatenteAduanal"
                       valor = "%04d" % row[k].to_i                                             
                     else
                       valor = "%02d" % row[k].to_i                       
                     end
                   elsif encabezados[k] == 'estimuloFranjaFronteriza'
                       valor = "%01d" % row[k].to_i
-                  elsif encabezados[k] == 'Patente'
+                  elsif encabezados[k] == 'patente'
                       valor = "%04d" % row[k].to_i
                   else
                     valor = row[k].to_f  
