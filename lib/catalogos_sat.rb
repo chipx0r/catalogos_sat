@@ -260,6 +260,8 @@ class Catalogos
                     end
                   elsif encabezados[k] == 'estimuloFranjaFronteriza'
                       valor = "%01d" % row[k].to_i
+                  elsif encabezados[k].include? 'Patente'
+                      valor = "%04d" % row[k].to_i
                   else
                     valor = row[k].to_f  
                     if valor % 1 == 0
