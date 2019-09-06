@@ -13,7 +13,7 @@ class CatalogosTest < Minitest::Test
   def test_main
     myTest = Catalogos.new()
     assert(myTest.main(true))
-    #assert(myTest.main(true,'http://omawww.sat.gob.mx/informacion_fiscal/factura_electronica/Documents/c_FraccionArancelaria.xls'))
+    #assert(myTest.main(true,'http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/c_FraccionArancelaria.xls'))
   end
 
   
